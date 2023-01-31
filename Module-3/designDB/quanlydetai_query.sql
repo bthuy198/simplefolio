@@ -157,16 +157,113 @@ join (select max(luong) as luong, mabm from giaovien group by mabm) as maxluong
 on maxluong.mabm = gv.mabm and maxluong.luong = gv.luong;
 
 -- q42
-SELECT TENDT
- FROM DETAI DT
- WHERE DT.MADT NOT IN (SELECT DT.MADT
-      FROM GIAOVIEN GV,THAMGIADT TG
-      WHERE GV.HOTEN = 'Nguyễn Hoài An'AND GV.MAGV = TG.MAGV
-      );
-      
-select tendt from detai dt 
-where dt.MADT not in (select dt1.MADT 
+select madt, tendt from detai dt 
+where dt.MADT not in (select distinct dt1.MADT 
 	from giaovien gv, thamgiadt tg, detai dt1
-    where hoten = 'Nguyễn Hoài An' and tg.MAGV = gv.MAGV);
-    
+    where hoten = 'Nguyễn Hoài An' and tg.MAGV = gv.MAGV and tg.madt = dt1.madt);
+;
 -- q43
+select madt, tendt, hoten as hotengvcndt from detai dt
+join giaovien gv on gv.magv = dt.gvcndt
+where dt.MADT not in (select distinct dt1.MADT 
+	from giaovien gv, thamgiadt tg, detai dt1
+    where hoten = 'Nguyễn Hoài An' and tg.MAGV = gv.MAGV and tg.madt = dt1.madt);
+;
+use quanlydetai;
+-- q44: Cho biết tên những giáo viên khoa Công nghệ thông tin mà chưa tham gia đề tài nào.
+select gv.magv from giaovien gv, bomon bm, khoa k, thamgiadt dt
+where gv.mabm = bm.mabm and k.makhoa = bm.makhoa and dt.magv = gv.magv and k.tenkhoa = 'Công nghệ thông tin' 
+	and gv.magv not in(select magv from thamgiadt);
+
+-- q45 Tìm những giáo viên không tham gia bất kỳ đề tài nào
+select magv, hoten from giaovien gv
+where magv not in (select distinct magv from thamgiadt);
+
+-- q46 Cho biết giáo viên có lương lớn hơn lương của giáo viên “Nguyễn Hoài An”
+select magv, hoten, luong from giaovien where luong > (select luong from giaovien where hoten = 'Nguyễn Hoài An');
+
+-- q47 Tìm những trưởng bộ môn tham gia tối thiểu 1 đề tài
+select distinct gv.magv, gv.hoten from giaovien gv, thamgiadt 
+where gv.magv = thamgiadt.magv and thamgiadt.magv in (select truongbm from bomon);
+
+-- q48 Tìm giáo viên trùng tên và cùng giới tính với giáo viên khác trong cùng bộ môn
+select * from giaovien gv1, giaovien gv2
+where gv1.hoten != gv2.hoten and gv1.phai = gv2.phai and gv1.magv != gv2.magv and gv1.mabm = gv2.mabm;
+
+-- Q49. Tìm những giáo viên có lương lớn hơn lương của ít nhất một giáo viên bộ môn “Hệ thống thông tin”
+select magv, hoten, luong from giaovien, bomon
+where giaovien.mabm = bomon.mabm and bomon.tenbm != 'Hệ thống thông tin' 
+	and luong > any (select luong from giaovien gv, bomon bm where gv.mabm = bm.mabm and bm.tenbm = 'Hệ thống thông tin');
+    
+-- Q50. Tìm những giáo viên có lương lớn hơn lương của tất cả giáo viên thuộc bộ môn “Hệ thống thông tin”
+select magv, hoten, luong from giaovien, bomon
+where giaovien.mabm = bomon.mabm and bomon.tenbm != 'Hệ thống thông tin' 
+	and luong > all (select luong from giaovien gv, bomon bm where gv.mabm = bm.mabm and bm.tenbm = 'Hệ thống thông tin');
+    
+-- Q51. Cho biết tên khoa có đông giáo viên nhất
+select tenkhoa, sum(slgv)
+from khoa k, (SELECT bomon.mabm, tenbm, makhoa, COUNT(gv.magv) AS slgv
+FROM bomon, giaovien gv
+WHERE bomon.mabm = gv.mabm
+GROUP BY gv.mabm) as countgv where countgv.makhoa = k.makhoa group by tenkhoa;
+-- Q52. Cho biết họ tên giáo viên chủ nhiệm nhiều đề tài nhất
+SELECT dt.GVCNDT, gv.HOTEN
+FROM quanlydetai.detai dt join giaovien gv on dt.MADT = gv.MAGV
+group by dt.GVCNDT
+having count(dt.MADT) >= all (select count(dt1.MADT) from detai dt1 group by dt1.GVCNDT );
+-- Q53. Cho biết mã bộ môn có nhiều giáo viên nhất
+SELECT bomon.mabm, tenbm, COUNT(gv.magv) AS slgv
+FROM bomon, giaovien gv
+WHERE bomon.mabm = gv.mabm
+GROUP BY gv.mabm;
+select *
+from (SELECT gv.MABM, count(gv.MABM) as max_bm
+	FROM quanlydetai.giaovien gv
+	group by gv.MABM) as temp
+where temp.max_bm >= all (SELECT count(gv.MABM) as max_bm
+	FROM quanlydetai.giaovien gv
+	group by gv.MABM);
+    
+-- Q54. Cho biết tên giáo viên và tên bộ môn của giáo viên tham gia nhiều đề tài nhất.
+select thamgiadt.magv, gv.hoten, bomon.TENBM
+from giaovien gv 
+join thamgiadt on gv.magv = thamgiadt.MAGV
+join bomon on bomon.MABM = gv.MABM
+group by thamgiadt.magv having count(distinct madt) >= all (select count(distinct madt) as sldt from thamgiadt tg group by tg.magv);
+
+-- Q55. Cho biết tên giáo viên tham gia nhiều đề tài nhất của bộ môn HTTT.
+select thamgiadt.magv, gv.hoten, bomon.TENBM
+from giaovien gv 
+join thamgiadt on gv.magv = thamgiadt.MAGV
+join bomon on bomon.MABM = gv.MABM
+where bomon.mabm = 'HTTT'
+group by thamgiadt.magv having count(distinct madt) >= 
+all (select count(distinct madt) as sldt 
+		from giaovien gv
+		join thamgiadt tgdt on tgdt.magv = gv.magv
+		join bomon bm on bm.MABM = gv.mabm
+		where bm.mabm = 'HTTT'
+		group by tgdt.magv);
+
+-- Q56. Cho biết tên giáo viên và tên bộ môn của giáo viên có nhiều người thân nhất.
+select gv.magv as 'mã giáo viên',gv.hoten as 'tên giáo viên', bm.tenbm as 'tên bộ môn'
+from giaovien gv
+join bomon bm on gv.mabm = bm.mabm
+join nguoithan nt on nt.magv = gv.magv
+group by nt.magv having count(ten) >= all(select count(ten) as slnt from nguoithan group by magv);
+
+-- Q57. Cho biết tên trưởng bộ môn mà chủ nhiệm nhiều đề tài nhất.
+select giaovien.magv, giaovien.hoten
+from giaovien, detai
+where giaovien.magv = detai.gvcndt 
+group by detai.gvcndt having count(madt) >= all(select count(madt)
+from giaovien gv
+join detai dt on gv.MAGV = dt.GVCNDT
+group by dt.GVCNDT);
+
+-- Q58. Cho biết tên giáo viên nào mà tham gia đề tài đủ tất cả các chủ đề.
+select gv.magv, gv.hoten
+from giaovien gv
+join thamgiadt tgdt on tgdt.magv = gv.magv
+join detai dt on tgdt.madt = dt.madt
+where 
