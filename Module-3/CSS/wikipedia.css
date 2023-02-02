@@ -1,0 +1,30 @@
+body {
+    font-family: sans-serif;
+    line-height: 20px;
+}
+
+h1 {
+    margin-bottom: 0;
+}
+
+hr+p {
+    margin-top: 0;
+    font-size: 13px;
+}
+
+p~p {
+    text-indent: 30px;
+}
+
+hr+p+p {
+    margin-top: 35px;
+}
+
+a {
+    text-decoration: none;
+    color: red;
+}
+
+sup {
+    font-size: 10px;
+}

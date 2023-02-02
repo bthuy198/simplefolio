@@ -266,4 +266,18 @@ select gv.magv, gv.hoten
 from giaovien gv
 join thamgiadt tgdt on tgdt.magv = gv.magv
 join detai dt on tgdt.madt = dt.madt
-where 
+where ;
+
+select distinct tg.magv
+from thamgiadt tg 
+where not exists (
+(select madt from detai) 
+not in (select madt from thamgiadt tg2 where tg2.magv = tg.magv));
+-- Q59. Cho biết tên đề tài nào mà được tất cả các giáo viên của bộ môn HTTT tham gia.
+use quanlydetai;
+select tendt 
+from detai dt
+join thamgiadt tg on tg.madt = dt.madt
+ group by madt;
+select * from giaovien where giaovien.mabm = 'HTTT'; -- 002, 003
+
