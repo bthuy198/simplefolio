@@ -25,9 +25,9 @@
   </c:if>
 </p>
 <p>
-  <a href="/customers">Back to customer list</a>
+  <a href="/customer">Back to customer list</a>
 </p>
-<form method="get">
+<form method="post">
   <fieldset>
     <legend>Customer information</legend>
     <table>

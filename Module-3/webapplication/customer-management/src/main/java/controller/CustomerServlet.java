@@ -74,7 +74,7 @@ public class CustomerServlet extends HttpServlet {
         customerService.add(newCustomer);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/customer/create.jsp");
-        request.setAttribute("message", "New customer was created");
+        request.setAttribute("message", "New  customer was created");
         try {
             requestDispatcher.forward(request, response);
         } catch (ServletException e) {

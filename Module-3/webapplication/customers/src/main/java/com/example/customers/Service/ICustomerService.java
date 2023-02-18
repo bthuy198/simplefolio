@@ -12,4 +12,7 @@ public interface ICustomerService {
     void deleteCustomerById(Long id);
     void createCustomer(Customer customer);
     boolean checkImageExists(String fileName);
+    List<Customer> searchCustomerAndPagging(String keyword, long idCustomerType, int offset, int limit);
+    int getNoOfRecords();
+    void setNoOfRecords(int noOfRecords);
 }

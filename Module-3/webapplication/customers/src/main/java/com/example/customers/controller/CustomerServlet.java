@@ -85,11 +85,44 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private void showCustomers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Customer> customers = iCustomerService.getAllCustomer();
+        String kw = "";
+        int limit = 5;
+        int page= 1;
+        int idCustomerType = -1;
+
+        if (request.getParameter("kw") != null) {
+            kw = request.getParameter("kw");
+        }
+        if (request.getParameter("ct") != null && !request.getParameter("ct").equals("")) {
+            idCustomerType = Integer.parseInt(request.getParameter("ct"));
+        }
+        if (request.getParameter("page") != null && !request.getParameter("page").equals("")) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        if (request.getParameter("limit") != null && !request.getParameter("limit").equals("")) {
+            limit = Integer.parseInt(request.getParameter("limit"));
+        }
+        List<Customer> customers = iCustomerService.searchCustomerAndPagging(kw, idCustomerType, (page - 1) * limit, limit);
         List<CustomerType> customerTypes = iCustomerTypeService.getAllCustomerType();
 
+        int noOfRecords = iCustomerService.getNoOfRecords(); // so luong ket qua search
+        int noOfPage = (int) Math.ceil(noOfRecords * 1.0 / limit); // so luong page
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / limit);
+
+//        request.setAttribute("currentPage", page); // page hien tai
+//        request.setAttribute("pages", noOfPage); // tong page
+//        request.setAttribute("kw", kw);
+//        request.setAttribute("ct", idCustomerType);
+//        request.setAttribute("customers", customers);
+//        request.setAttribute("customerTypes", customerTypes);
+
         request.setAttribute("customers", customers);
-        request.setAttribute("customerTypes", customerTypes);
+        request.setAttribute("customerTypes", customerTypes );
+        request.setAttribute("kw", kw);
+        request.setAttribute("ct", idCustomerType);
+
+        request.setAttribute("currentPage", page);
+        request.setAttribute("noOfPages", noOfPages);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderDashboard + "customer/customers.jsp");
         requestDispatcher.forward(request, response);

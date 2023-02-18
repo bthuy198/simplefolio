@@ -55,22 +55,22 @@
                         <div class="card-box">
                             <div class="mb-2">
                                 <div class="row">
-                                        <div class="form-group mr-2 col-6">
-                                            <button id="demo-btn-addrow" class="btn btn-primary"><a
-                                                    href="/customer?action=create"
-                                                    style="text-decoration: none; color: white"><i
-                                                    class="mdi mdi-plus-circle mr-2"></i> Add New Customer</a></button>
+                                    <div class="form-group mr-2 col-6">
+                                        <button id="demo-btn-addrow" class="btn btn-primary"><a
+                                                href="/customer?action=create"
+                                                style="text-decoration: none; color: white"><i
+                                                class="mdi mdi-plus-circle mr-2"></i> Add New Customer</a></button>
+                                    </div>
+                                    <div class="form-group col-6 row justify-content-end">
+                                        <div>
+                                            <select id="demo-foo-filter-status" class="custom-select custom-select-sm">
+                                                <option value="-1">ALL</option>
+                                                <c:forEach items="${requestScope.customerTypes}" var="cType">
+                                                    <option value="${cType.getId()}">${cType.getType()}</option>
+                                                </c:forEach>
+                                            </select>
                                         </div>
-                                        <div class="form-group col-6 row justify-content-end">
-                                            <div>
-                                                <select id="demo-foo-filter-status" class="custom-select custom-select-sm">
-                                                    <option value="-1">ALL</option>
-                                                    <c:forEach items="${requestScope.customerTypes}" var="cType">
-                                                        <option value="${cType.getId()}">${cType.getType()}</option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -121,19 +121,55 @@
                             </div>
 
                             <div class="text-right">
-                                <ul class="pagination pagination-rounded justify-content-end footable-pagination m-t-10 mb-0">
-                                    <li class="footable-page-arrow disabled"><a data-page="first" href="#first">«</a>
-                                    </li>
-                                    <li class="footable-page-arrow disabled"><a data-page="prev" href="#prev">‹</a></li>
-                                    <li class="footable-page active"><a data-page="0" href="#">1</a></li>
-                                    <li class="footable-page"><a data-page="1" href="#">2</a></li>
-                                    <li class="footable-page"><a data-page="2" href="#">3</a></li>
-                                    <li class="footable-page"><a data-page="3" href="#">4</a></li>
-                                    <li class="footable-page"><a data-page="4" href="#">5</a></li>
-                                    <li class="footable-page-arrow"><a data-page="next" href="#next">›</a></li>
-                                    <li class="footable-page-arrow"><a data-page="last" href="#last">»</a></li>
-                                </ul>
+<%--                                <ul class="pagination pagination-rounded justify-content-end footable-pagination m-t-10 mb-0">--%>
+<%--                                    <c:if test="${currentPage != 1}">--%>
+<%--                                        <li class="footable-page-arrow disabled"><a data-page="prev" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage - 1}">‹</a>--%>
+<%--                                        </li>--%>
+<%--                                    </c:if>--%>
+<%--                                    <c:forEach begin="1" items="${pages}" end="${pages}" var="i">--%>
+<%--                                        <c:when test="${currentPage eq i}">--%>
+<%--                                            <li class="footable-page active"><a data-page="0"--%>
+<%--                                                                                href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}">${i}</a>--%>
+<%--                                            </li>--%>
+<%--                                        </c:when>--%>
+<%--                                        <c:otherwise>--%>
+<%--                                            <li class="footable-page"><a data-page="1" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}">${i}</a></li>--%>
+<%--                                        </c:otherwise>--%>
+<%--                                    </c:forEach>--%>
+<%--                                    <c:if test="${currentPage lt pages}">--%>
+<%--                                        <li class="footable-page-arrow"><a data-page="next" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage + 1}">›</a></li>--%>
+<%--                                    </c:if>--%>
+
+<%--                                </ul>--%>
                             </div>
+                            <div class="row justify-content-end">
+                            <ul class="pagination pagination-split float-right mb-0">
+                                <c:if test="${currentPage != 1}">
+                                    <li class="page-item">
+                                        <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage-1}" class="page-link"><i class="fa fa-angle-left"></i></a>
+                                    </li>
+                                </c:if>
+                                <c:forEach begin="1" end="${noOfPages}" var="i">
+                                    <c:choose>
+                                        <c:when test="${currentPage eq i}">
+                                            <li class="page-item active">
+                                                <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}" class="page-link">${i}</a>
+                                            </li>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li class="page-item">
+                                                <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}" class="page-link">${i}</a>
+                                            </li>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                                <c:if test="${currentPage lt noOfPages}">
+                                    <li class="page-item">
+                                        <a href="/customers?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage+1}" class="page-link"><i class="fa fa-angle-right"></i></a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </div>
 
                         </div> <!-- end card-box -->
                     </div> <!-- end col -->

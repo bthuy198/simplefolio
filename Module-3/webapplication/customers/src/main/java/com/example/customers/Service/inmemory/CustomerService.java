@@ -67,6 +67,21 @@ public class CustomerService implements ICustomerService {
         return false;
     }
 
+    @Override
+    public List<Customer> searchCustomerAndPagging(String keyword, long idCustomerType, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public int getNoOfRecords() {
+        return 0;
+    }
+
+    @Override
+    public void setNoOfRecords(int noOfRecords) {
+
+    }
+
     public void add(Customer customer) {
         customerList.add(customer);
     }
