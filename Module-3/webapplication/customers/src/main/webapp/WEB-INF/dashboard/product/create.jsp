@@ -87,14 +87,14 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Price</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="price" name="price"
+                                                    <input type="number" class="form-control" id="price" name="price"
                                                            value="${requestScope.product.getPrice()}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Quantity</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="quantity"
+                                                    <input type="number" class="form-control" id="quantity"
                                                            name="quantity"
                                                            value="${requestScope.product.getQuantity()}">
                                                 </div>

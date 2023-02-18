@@ -1,77 +1,35 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 14/02/2023
-  Time: 9:19 CH
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="com.example.customers.model.Customer" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- Topbar Start -->
 <div class="navbar-custom">
-    <ul class="list-unstyled topnav-menu float-right mb-0">
-
-        <li class="d-none d-sm-block">
-            <form class="app-search">
-<%--                <div class="app-search-box" style="width: 100px">--%>
-<%--                    <select id="demo-foo-filter-status" class="custom-select custom-select-sm form-control">--%>
-<%--                        <option value="-1">ALL</option>--%>
-<%--                        <c:forEach items="${requestScope.customerTypes}" var="cType">--%>
-<%--                            <option value="${cType.getId()}">${cType.getType()}</option>--%>
-<%--                        </c:forEach>--%>
-<%--                    </select>--%>
-<%--                </div>--%>
-                <div class="app-search-box">
+    <div class="float-right">
+        <form >
+            <div style="display: flex; align-items: center; height: 70px">
+                <div style="width: 100px;margin-right: 10px" >
+                    <select id="demo-foo-filter-status" class=" custom-select custom-select-sm form-control" name="ct"
+                            style="height: 38px;background-color: rgba(255, 255, 255, 0.1);border-radius: 30px; color: #98a6ad;border: none">
+                        <option value="-1">ALL</option>
+                        <c:forEach items="${requestScope.customerTypes}" var="cType">
+                            <option value="${cType.getId()}">${cType.getType()}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="kw" name="kw">
-                        <div class="input-group-append">
-                            <button class="btn" type="submit">
-                                <i class="fe-search"></i>
-                            </button>
-                        </div>
+                        <input type="text" class="form-control" placeholder="Search..." id="kw" name="kw" style="height: 38px;background-color: rgba(255, 255, 255, 0.1);border-radius: 30px; color: white; border: none">
+                        <span style="position: absolute;left:150px"><button class="btn" type="submit"><i class="fe-search"></i></button></span>
+<%--                        <div class="input-group-append">--%>
+<%--                            <button class="btn" type="submit">--%>
+<%--                                <i class="fe-search"></i>--%>
+<%--                            </button>--%>
+<%--                        </div>--%>
                     </div>
                 </div>
-            </form>
-        </li>
-
-        <li class="dropdown notification-list">
-            <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown"
-               href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                <img src="assets\images\users\avatar-1.jpg" alt="user-image" class="rounded-circle">
-                <span class="pro-user-name ml-1">
-                                Nik Patel <i class="mdi mdi-chevron-down"></i>
-                            </span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                <!-- item-->
-                <div class="dropdown-header noti-title">
-                    <h6 class="text-overflow m-0">Welcome !</h6>
-                </div>
-
-                <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                    <i class="remixicon-account-circle-line"></i>
-                    <span>My Account</span>
-                </a>
-
-                <div class="dropdown-divider"></div>
-
-                <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                    <i class="remixicon-logout-box-line"></i>
-                    <span>Logout</span>
-                </a>
-
             </div>
-        </li>
-
-
-        <li class="dropdown notification-list">
-            <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect waves-light">
-                <i class="fe-settings noti-icon"></i>
-            </a>
-        </li>
-
-
-    </ul>
+        </form>
+    </div>
 
     <!-- LOGO -->
     <div class="logo-box">

@@ -234,7 +234,12 @@ public class ProductServlet extends HttpServlet {
         Product product = new Product();
 
         //String productName, double price, int quantity, String description, Date createAt, int categoryId
-        isValidateName(request, product, errors);
+       String name = request.getParameter("name");
+        if(name.trim().equals("")){
+            errors.add("Tên sản phẩm không được để trống");
+        }
+//        isValidateName(request, product, errors);
+        checkProductExist(request, product, errors);
         isValidatePrice(request, product, errors);
         isValidateQuantity(request, product, errors);
 
@@ -263,6 +268,18 @@ public class ProductServlet extends HttpServlet {
             request.setAttribute("product", product);
             requestDispatcher.forward(request, response);
         }
+    }
+    //tồn tại: true; chưa: false
+    private void checkProductExist(HttpServletRequest request,Product product, List<String> errors){
+        String name = request.getParameter("name");
+        List<Product> products = iProductService.getAllProducts();
+        for(int i = 0; i < products.size(); i++){
+            if(products.get(i).getProductName().equalsIgnoreCase(name)){
+                errors.add("Sản phẩm đã tồn tại");
+                return;
+            }
+        }
+        product.setProductName(name);
     }
     private void handleImageUpload(HttpServletRequest req, Product product, List<String> errors) throws ServletException, IOException {
         for (Part part : req.getParts()) {

@@ -7,6 +7,7 @@
 <head>
     <meta charset="utf-8">
     <title>Minton - Responsive Admin Dashboard Template</title>
+    <link href="/dashboard/assets\libs\tablesaw\tablesaw.css" rel="stylesheet" type="text/css">
     <jsp:include page="/WEB-INF/dashboard/layout/meta-head.jsp"></jsp:include>
 
 </head>
@@ -63,14 +64,21 @@
                                     </div>
                                     <div class="form-group col-6 row justify-content-end">
                                         <div>
-                                            <select id="demo-foo-filter-status" class="custom-select custom-select-sm">
-                                                <option value="-1">ALL</option>
-                                                <c:forEach items="${requestScope.customerTypes}" var="cType">
-                                                    <option value="${cType.getId()}">${cType.getType()}</option>
-                                                </c:forEach>
+                                            <select id="demo-foo-filter-status" class="custom-select custom-select-sm" name="sort">
+                                                <option value="1">Name (A-Z)</option>
+                                                <option value="-1">Name (Z-A)</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    <%--                                    <div class="form-group col-6 row justify-content-end">--%>
+                                    <%--                                        <div>--%>
+                                    <%--                                            <select id="demo-foo-filter-status" class="custom-select custom-select-sm">--%>
+                                    <%--                                                <option value="-1">ALL</option>--%>
+                                    <%--                                                <c:forEach items="${requestScope.customerTypes}" var="cType">--%>
+                                    <%--                                                    <option value="${cType.getId()}">${cType.getType()}</option>--%>
+                                    <%--                                                </c:forEach>--%>
+                                    <%--                                            </select>--%>
+                                    <%--                                        </div>--%>
+                                    <%--                                    </div>--%>
                                 </div>
                             </div>
 
@@ -121,55 +129,59 @@
                             </div>
 
                             <div class="text-right">
-<%--                                <ul class="pagination pagination-rounded justify-content-end footable-pagination m-t-10 mb-0">--%>
-<%--                                    <c:if test="${currentPage != 1}">--%>
-<%--                                        <li class="footable-page-arrow disabled"><a data-page="prev" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage - 1}">‹</a>--%>
-<%--                                        </li>--%>
-<%--                                    </c:if>--%>
-<%--                                    <c:forEach begin="1" items="${pages}" end="${pages}" var="i">--%>
-<%--                                        <c:when test="${currentPage eq i}">--%>
-<%--                                            <li class="footable-page active"><a data-page="0"--%>
-<%--                                                                                href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}">${i}</a>--%>
-<%--                                            </li>--%>
-<%--                                        </c:when>--%>
-<%--                                        <c:otherwise>--%>
-<%--                                            <li class="footable-page"><a data-page="1" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}">${i}</a></li>--%>
-<%--                                        </c:otherwise>--%>
-<%--                                    </c:forEach>--%>
-<%--                                    <c:if test="${currentPage lt pages}">--%>
-<%--                                        <li class="footable-page-arrow"><a data-page="next" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage + 1}">›</a></li>--%>
-<%--                                    </c:if>--%>
+                                <%--                                <ul class="pagination pagination-rounded justify-content-end footable-pagination m-t-10 mb-0">--%>
+                                <%--                                    <c:if test="${currentPage != 1}">--%>
+                                <%--                                        <li class="footable-page-arrow disabled"><a data-page="prev" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage - 1}">‹</a>--%>
+                                <%--                                        </li>--%>
+                                <%--                                    </c:if>--%>
+                                <%--                                    <c:forEach begin="1" items="${pages}" end="${pages}" var="i">--%>
+                                <%--                                        <c:when test="${currentPage eq i}">--%>
+                                <%--                                            <li class="footable-page active"><a data-page="0"--%>
+                                <%--                                                                                href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}">${i}</a>--%>
+                                <%--                                            </li>--%>
+                                <%--                                        </c:when>--%>
+                                <%--                                        <c:otherwise>--%>
+                                <%--                                            <li class="footable-page"><a data-page="1" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}">${i}</a></li>--%>
+                                <%--                                        </c:otherwise>--%>
+                                <%--                                    </c:forEach>--%>
+                                <%--                                    <c:if test="${currentPage lt pages}">--%>
+                                <%--                                        <li class="footable-page-arrow"><a data-page="next" href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage + 1}">›</a></li>--%>
+                                <%--                                    </c:if>--%>
 
-<%--                                </ul>--%>
+                                <%--                                </ul>--%>
                             </div>
                             <div class="row justify-content-end">
-                            <ul class="pagination pagination-split float-right mb-0">
-                                <c:if test="${currentPage != 1}">
-                                    <li class="page-item">
-                                        <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage-1}" class="page-link"><i class="fa fa-angle-left"></i></a>
-                                    </li>
-                                </c:if>
-                                <c:forEach begin="1" end="${noOfPages}" var="i">
-                                    <c:choose>
-                                        <c:when test="${currentPage eq i}">
-                                            <li class="page-item active">
-                                                <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}" class="page-link">${i}</a>
-                                            </li>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li class="page-item">
-                                                <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}" class="page-link">${i}</a>
-                                            </li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                                <c:if test="${currentPage lt noOfPages}">
-                                    <li class="page-item">
-                                        <a href="/customers?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage+1}" class="page-link"><i class="fa fa-angle-right"></i></a>
-                                    </li>
-                                </c:if>
-                            </ul>
-                        </div>
+                                <ul class="pagination pagination-split float-right mb-0">
+                                    <c:if test="${currentPage != 1}">
+                                        <li class="page-item">
+                                            <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage-1}&sort=${requestScope.sort}"
+                                               class="page-link"><i class="fa fa-angle-left"></i></a>
+                                        </li>
+                                    </c:if>
+                                    <c:forEach begin="1" end="${noOfPages}" var="i">
+                                        <c:choose>
+                                            <c:when test="${currentPage eq i}">
+                                                <li class="page-item active">
+                                                    <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}&sort=${requestScope.sort}"
+                                                       class="page-link">${i}</a>
+                                                </li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="page-item">
+                                                    <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}&sort=${requestScope.sort}"
+                                                       class="page-link">${i}</a>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                    <c:if test="${currentPage lt noOfPages}">
+                                        <li class="page-item">
+                                            <a href="/customers?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage+1}&sort=${requestScope.sort}"
+                                               class="page-link"><i class="fa fa-angle-right"></i></a>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </div>
 
                         </div> <!-- end card-box -->
                     </div> <!-- end col -->

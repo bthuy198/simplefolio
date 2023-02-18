@@ -68,9 +68,10 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public List<Customer> searchCustomerAndPagging(String keyword, long idCustomerType, int offset, int limit) {
+    public List<Customer> searchCustomerAndPagging(int sort, String keyword, long idCustomerType, int offset, int limit) {
         return null;
     }
+
 
     @Override
     public int getNoOfRecords() {
@@ -80,6 +81,11 @@ public class CustomerService implements ICustomerService {
     @Override
     public void setNoOfRecords(int noOfRecords) {
 
+    }
+
+    @Override
+    public List<Customer> sortByNameASC() {
+        return null;
     }
 
     public void add(Customer customer) {

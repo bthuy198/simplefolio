@@ -17,6 +17,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,20 +42,25 @@ public class CustomerServlet extends HttpServlet {
         if (action == null) {
             action = "";
         }
-        switch (action) {
-            case "create":
-                showCreateForm(request, response);
-                break;
-            case "delete":
-                showDeleteForm(request, response);
-                break;
-            case "edit":
-                showEditForm(request, response);
-                break;
-            default:
-                showCustomers(request, response);
-                break;
+        try {
+            switch (action) {
+                case "create":
+                    showCreateForm(request, response);
+                    break;
+                case "delete":
+                    showDeleteForm(request, response);
+                    break;
+                case "edit":
+                    showEditForm(request, response);
+                    break;
+                default:
+                    showCustomers(request, response);
+                    break;
+            }
+        } catch (ServletException s) {
+            s.printStackTrace();
         }
+
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
@@ -87,8 +93,9 @@ public class CustomerServlet extends HttpServlet {
     private void showCustomers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String kw = "";
         int limit = 5;
-        int page= 1;
+        int page = 1;
         int idCustomerType = -1;
+        int sort = 1;
 
         if (request.getParameter("kw") != null) {
             kw = request.getParameter("kw");
@@ -102,7 +109,10 @@ public class CustomerServlet extends HttpServlet {
         if (request.getParameter("limit") != null && !request.getParameter("limit").equals("")) {
             limit = Integer.parseInt(request.getParameter("limit"));
         }
-        List<Customer> customers = iCustomerService.searchCustomerAndPagging(kw, idCustomerType, (page - 1) * limit, limit);
+        if (request.getParameter("sort") != null && !request.getParameter("sort").equals("")) {
+            sort = Integer.parseInt(request.getParameter("sort"));
+        }
+        List<Customer> customers = iCustomerService.searchCustomerAndPagging(sort, kw, idCustomerType, (page - 1) * limit, limit);
         List<CustomerType> customerTypes = iCustomerTypeService.getAllCustomerType();
 
         int noOfRecords = iCustomerService.getNoOfRecords(); // so luong ket qua search
@@ -117,9 +127,10 @@ public class CustomerServlet extends HttpServlet {
 //        request.setAttribute("customerTypes", customerTypes);
 
         request.setAttribute("customers", customers);
-        request.setAttribute("customerTypes", customerTypes );
+        request.setAttribute("customerTypes", customerTypes);
         request.setAttribute("kw", kw);
         request.setAttribute("ct", idCustomerType);
+        request.setAttribute("sort", sort);
 
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPages", noOfPages);
@@ -150,10 +161,21 @@ public class CustomerServlet extends HttpServlet {
             case "edit":
                 editCustomer(request, response);
                 break;
+            case "sortByNameASC":
+                sortByNameASC(request, response);
+                break;
             default:
                 showCustomers(request, response);
                 break;
         }
+    }
+
+    private void sortByNameASC(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Customer> customers = iCustomerService.sortByNameASC();
+        request.setAttribute("customers", customers);
+
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderDashboard + "customers.jsp");
+        requestDispatcher.forward(request,response);
     }
 
     private void editCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -162,44 +184,49 @@ public class CustomerServlet extends HttpServlet {
         request.setAttribute("customerTypes", customerTypes);
         Customer customer = new Customer();
 
-        isValidateName(request, customer, errors);
-        isValidateAddress(request, customer, errors);
-        isValidateType(request, customer, errors);
+//        try {
+            isValidateName(request, customer, errors);
+            isValidateAddress(request, customer, errors);
+            isValidateType(request, customer, errors);
 
-        Part part = isValidImage(request, customer, errors);
+            Part part = isValidImage(request, customer, errors);
 
-        String sBirthday = request.getParameter("birthday");
-        Date birthday = DateUtils.formatDate(sBirthday);
-        customer.setBirthday(birthday);
+            String sBirthday = request.getParameter("birthday");
+            Date birthday = DateUtils.formatDate(sBirthday);
+            customer.setBirthday(birthday);
 
-        if(errors.size() == 0){
-            long id = Long.parseLong(request.getParameter("id"));
-            customer.setId(id);
-            Customer customerDB = iCustomerService.findCustomerById(customer.getId());
-            if ( customer.getImg()!=null) {
-                if(customerDB.getImg() != null && !customerDB.getImg().equals(customer.getImg()) && part != null){
-                    handleEditImageUploadAdvanced(part);
+            if (errors.isEmpty()) {
+                long id = Long.parseLong(request.getParameter("id"));
+                customer.setId(id);
+                Customer customerDB = iCustomerService.findCustomerById(customer.getId());
+                if (customer.getImg() != null) {
+                    if (customerDB.getImg() != null && !customerDB.getImg().equals(customer.getImg()) && part != null) {
+                        handleEditImageUploadAdvanced(part);
+                    }
                 }
+                iCustomerService.editCustomer(customer);
+                response.sendRedirect("/customer");
+            } else {
+                request.setAttribute("errors", errors);
+                request.setAttribute("customer", customer);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderDashboard + "customer/edit.jsp");
+                requestDispatcher.forward(request, response);
             }
-            iCustomerService.editCustomer(customer);
-            response.sendRedirect("/customer");
-        } else {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderDashboard + "customer/edit.jsp");
-            request.setAttribute("errors", errors);
-            request.setAttribute("customer", customer);
-            requestDispatcher.forward(request, response);
-        }
+//        } catch (Exception e) {
+//            errors.add("Định dạng các trường dữ liệu không hợp lệ");
+//        }
     }
+
 
     private Part isValidImage(HttpServletRequest request, Customer customer, List<String> errors) throws ServletException, IOException {
         for (Part part : request.getParts()) {
             String fileName = extractFileName(part);
-            if(!fileName.equals("")){
+            if (!fileName.equals("")) {
                 customer.setImg(fileName);
                 boolean check = iCustomerService.checkImageExists(fileName);
                 if (check == true) {
                     return null;
-                }else {
+                } else {
                     return part;
                 }
             }
@@ -224,6 +251,7 @@ public class CustomerServlet extends HttpServlet {
         part.write(nameFileProject);
 
     }
+
     private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long id = Long.parseLong(request.getParameter("idDelete"));
         iCustomerService.deleteCustomerById(id);
@@ -257,13 +285,14 @@ public class CustomerServlet extends HttpServlet {
             handleImageUpload(request, customer, errors);
             request.setAttribute("message", "Created successfully!");
             iCustomerService.createCustomer(customer);
-            requestDispatcher.forward(request,response);
+            requestDispatcher.forward(request, response);
         } else {
             request.setAttribute("errors", errors);
             request.setAttribute("customer", customer);
             requestDispatcher.forward(request, response);
         }
     }
+
     private String extractFileName(Part part) {
         String contentDisp = part.getHeader("content-disposition");
         String[] items = contentDisp.split(";");
@@ -274,11 +303,12 @@ public class CustomerServlet extends HttpServlet {
         }
         return "";
     }
+
     private void handleImageUpload(HttpServletRequest req, Customer customer, List<String> errors) throws ServletException, IOException {
         for (Part part : req.getParts()) {
             String fileName = extractFileName(part);
             // refines the fileName in case it is an absolute path
-            if(!fileName.equals("")){
+            if (!fileName.equals("")) {
                 String appRealPath = getServletContext().getRealPath("/") + "images";
                 File file = new File(appRealPath);
                 if (!file.exists()) {
@@ -297,6 +327,15 @@ public class CustomerServlet extends HttpServlet {
             }
 
         }
+
+    }
+
+    private void isValidateTime(HttpServletRequest request, Customer customer, List<String> errors) {
+        String sBirthday = request.getParameter("birthday");
+        if(sBirthday == null){
+                errors.add("Định dạng ngày tháng không hợp lệ");
+        }
+        Date birthday = DateUtils.formatDate(sBirthday);
 
     }
 
