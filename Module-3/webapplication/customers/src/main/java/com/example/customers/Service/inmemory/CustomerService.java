@@ -68,7 +68,12 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public List<Customer> searchCustomerAndPagging(int sort, String keyword, long idCustomerType, int offset, int limit) {
+    public List<Customer> searchCustomerAndPaggingNoSort(String keyword, long idCustomerType, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public List<Customer> searchCustomerAndPagging(String sortName, String sortOption, String keyword, long idCustomerType, int offset, int limit) {
         return null;
     }
 

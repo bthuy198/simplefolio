@@ -1,5 +1,8 @@
 package com.example.customers.model;
 
+import com.example.customers.Service.IProductService;
+import com.example.customers.Service.mysql.MSProductService;
+
 import java.util.List;
 
 public class Order {
@@ -9,6 +12,7 @@ public class Order {
     private String address;
     private List<OrderItem> orderItems;
     private double total;
+    private final IProductService iProductService = new MSProductService();
 
     public Order() {
     }
@@ -76,10 +80,15 @@ public class Order {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+
     }
 
     public double getTotal() {
-        return total;
+//        for(int i = 0; i < getOrderItems().size(); i ++){
+//            Product p = iProductService.findProductById(getOrderItems().get(i).getIdProduct());
+//            this.total += p.getPrice() * orderItems.get(i).getQuantity();
+//        }
+        return this.total;
     }
 
     public void setTotal(double total) {

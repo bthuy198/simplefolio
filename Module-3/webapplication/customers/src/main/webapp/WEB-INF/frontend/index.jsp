@@ -140,7 +140,7 @@
                                                 <ul class="dropdown">
                                                     <li><a href="shop-grid.html">Shop Grid</a></li>
                                                     <li><a href="cart.jsp">Cart</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
+                                                    <li><a href="checkout.jsp">Checkout</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="#">Pages</a></li>

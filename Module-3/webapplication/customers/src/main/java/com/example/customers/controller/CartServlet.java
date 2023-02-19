@@ -43,10 +43,18 @@ public class CartServlet extends HttpServlet {
             case "checkout":
                 showCheckOutCart(request, response);
                 break;
+            case "delete":
+                showDelete(request, response);
+                break;
             default:
                 showCart(request, response);
 
         }
+    }
+
+    private void showDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderFrontEnd + "cart.jsp");
+        requestDispatcher.forward(request, response);
     }
 
     private void showCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -84,12 +92,13 @@ public class CartServlet extends HttpServlet {
         if (order != null) {
             request.setAttribute("orderDTO", convertToOrderDTO(order));
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderFrontEnd + "cart.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderFrontEnd + "checkout.jsp");
         requestDispatcher.forward(request, response);
     }
 
-    private void showEditCart(HttpServletRequest request, HttpServletResponse response) {
-
+    private void showEditCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderFrontEnd + "cart.jsp");
+        requestDispatcher.forward(request, response);
     }
 
     private void handleAddToCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -177,6 +186,116 @@ public class CartServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+        switch (action) {
+            case "edit":
+                handleEditCart(request, response);
+                break;
+            case "checkout":
+                handleCheckout(request, response);
+                break;
+            case "delete":
+                delete(request,response);
+                break;
+        }
+    }
 
+    private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long idDelete = Long.parseLong(request.getParameter("idDelete"));
+        Product product = iProductService.findProductById(idDelete);
+
+        HttpSession session = request.getSession();
+        Order order = (Order) session.getAttribute("order");
+        if(order != null && checkIdProductExistInOrder(order, idDelete)){
+            List<OrderItem> orderItems = removeItemInOrder(order, idDelete);
+
+
+            order.setOrderItems(orderItems);
+
+            updateTotalInOrder(order);
+            session.setAttribute("order", order);
+            request.setAttribute("orderDTO", convertToOrderDTO(order));
+        } else{
+            request.setAttribute("message", "Sản phẩm không tồn tại");
+        }
+        response.sendRedirect("cart?message=delete");
+//        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderFrontEnd + "cart.jsp");
+//        requestDispatcher.forward(request, response);
+    }
+
+    private List<OrderItem> removeItemInOrder(Order order, long idDelete) {
+        List<OrderItem> orderItems = order.getOrderItems();
+        for(int i = 0; i < orderItems.size(); i++){
+            if(orderItems.get(i).getIdProduct() == idDelete){
+                orderItems.remove(i);
+            }
+        }
+        return orderItems;
+    }
+
+    private void handleCheckout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String name = request.getParameter("name");
+        String phone = request.getParameter("phone");
+        String address = request.getParameter("address");
+        HttpSession session = request.getSession();
+        Order order = (Order) session.getAttribute("order");
+
+        if (order != null) {
+            order.setAddress(address);
+            order.setPhone(phone);
+            order.setName(name);
+            updateTotalInOrder(order);
+
+            iOrderService.saveOrder(order);
+            session.removeAttribute("order");
+            response.sendRedirect("/");
+        }
+    }
+
+    private void handleEditCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long idProduct = Long.parseLong(request.getParameter("idproduct"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+        HttpSession session = request.getSession();
+        Order order = (Order) session.getAttribute("order");
+
+
+        if (checkIdProductExistInOrder(order, idProduct)) {
+            setQuantityInOrder(order, idProduct, quantity);
+            updateTotalInOrder(order);
+            session.setAttribute("order", order);
+
+            request.setAttribute("orderDTO", convertToOrderDTO(order));
+        }else{
+            // báo lỗi không có idproduct
+            request.setAttribute("message", "Sản phẩm không tồn tại");
+        }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderFrontEnd + "cart.jsp");
+        requestDispatcher.forward(request, response);
+    }
+
+    private void setQuantityInOrder(Order order, long idProduct, int quantity) {
+        for (int i = 0; i < order.getOrderItems().size(); i++) {
+            if (order.getOrderItems().get(i).getIdProduct() == idProduct) {
+                if (quantity > 0) {
+                    order.getOrderItems().get(i).setQuantity(quantity);
+                }else{
+                    order.getOrderItems().remove(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private boolean checkIdProductExistInOrder(Order order, long idProduct) {
+        for (int i = 0; i < order.getOrderItems().size(); i++) {
+            if (order.getOrderItems().get(i).getIdProduct() == idProduct) {
+                return true;
+            }
+        }
+        return false;
     }
 }

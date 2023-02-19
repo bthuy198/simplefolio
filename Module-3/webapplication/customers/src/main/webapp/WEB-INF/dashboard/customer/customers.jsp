@@ -56,19 +56,44 @@
                         <div class="card-box">
                             <div class="mb-2">
                                 <div class="row">
-                                    <div class="form-group mr-2 col-6">
+                                    <div class="form-group mr-2 col-3">
                                         <button id="demo-btn-addrow" class="btn btn-primary"><a
                                                 href="/customer?action=create"
                                                 style="text-decoration: none; color: white"><i
                                                 class="mdi mdi-plus-circle mr-2"></i> Add New Customer</a></button>
                                     </div>
-                                    <div class="form-group col-6 row justify-content-end">
+                                    <div class="form-group col-9 row justify-content-end">
                                         <div>
-                                            <select id="demo-foo-filter-status" class="custom-select custom-select-sm" name="sort">
-                                                <option value="1">Name (A-Z)</option>
-                                                <option value="-1">Name (Z-A)</option>
-                                            </select>
+                                            <form action="/customer" method="get">
+                                                <input type="hidden" name="page" value="${requestScope.currentPage}">
+                                                <input type="hidden" name="kw" value="${requestScope.kw}">
+                                                <input type="hidden" name="ct" value="${requestScope.ct}">
+                                                <select  style="width: 150px; display: inline-block" id="foo-filter-name" class="custom-select custom-select-sm form-control" name="sort.name">
+                                                    <option value="name"
+                                                            <c:if test="${requestScope.sortName == 'name'}">selected</c:if>
+                                                    >Name</option>
+                                                    <option value="birthday"
+                                                            <c:if test="${requestScope.sortName == 'birthday'}">selected</c:if>
+                                                    >Birthday</option>
+                                                    <option value="address"
+                                                            <c:if test="${requestScope.sortName == 'address'}">selected</c:if>
+                                                    >Address</option>
+                                                    <option value="idType"
+                                                            <c:if test="${requestScope.sortName == 'idType'}">selected</c:if>
+                                                    >Type Customer</option>
+                                                </select>
+                                                <select style="width: 80px; display: inline-block" id="foo-filter-option" class="custom-select custom-select-sm form-control" name="sort.option">
+                                                    <option value="asc"
+                                                            <c:if test="${requestScope.sortOption == 'asc'}">selected</c:if>
+                                                    >ASC</option>
+                                                    <option value="desc"
+                                                            <c:if test="${requestScope.sortOption == 'desc'}">selected</c:if>
+                                                    >DESC</option>
+                                                </select>
+                                                <button style="width: 100px; display: inline-block" class="btn btn-primary" type="submit">Sort</button>
+                                            </form>
                                         </div>
+
                                     <%--                                    <div class="form-group col-6 row justify-content-end">--%>
                                     <%--                                        <div>--%>
                                     <%--                                            <select id="demo-foo-filter-status" class="custom-select custom-select-sm">--%>
@@ -154,7 +179,7 @@
                                 <ul class="pagination pagination-split float-right mb-0">
                                     <c:if test="${currentPage != 1}">
                                         <li class="page-item">
-                                            <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage-1}&sort=${requestScope.sort}"
+                                            <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage-1}&sort.name=${requestScope.sortName}&sort.option=${requestScope.sortOption}"
                                                class="page-link"><i class="fa fa-angle-left"></i></a>
                                         </li>
                                     </c:if>
@@ -162,13 +187,13 @@
                                         <c:choose>
                                             <c:when test="${currentPage eq i}">
                                                 <li class="page-item active">
-                                                    <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}&sort=${requestScope.sort}"
+                                                    <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}&sort.name=${requestScope.sortName}&sort.option=${requestScope.sortOption}"
                                                        class="page-link">${i}</a>
                                                 </li>
                                             </c:when>
                                             <c:otherwise>
                                                 <li class="page-item">
-                                                    <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}&sort=${requestScope.sort}"
+                                                    <a href="/customer?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${i}&sort.name=${requestScope.sortName}&sort.option=${requestScope.sortOption}"
                                                        class="page-link">${i}</a>
                                                 </li>
                                             </c:otherwise>
@@ -176,7 +201,7 @@
                                     </c:forEach>
                                     <c:if test="${currentPage lt noOfPages}">
                                         <li class="page-item">
-                                            <a href="/customers?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage+1}&sort=${requestScope.sort}"
+                                            <a href="/customers?kw=${requestScope.kw}&ct=${requestScope.ct}&page=${currentPage+1}&sort.name=${requestScope.sortName}&sort.option=${requestScope.sortOption}"
                                                class="page-link"><i class="fa fa-angle-right"></i></a>
                                         </li>
                                     </c:if>

@@ -30,3 +30,5 @@
 <link rel="stylesheet" href="/frontend/css\reset.css">
 <link rel="stylesheet" href="/frontend/style.css">
 <link rel="stylesheet" href="/frontend/css\responsive.css">
+
+<link href="/frontend/css/sweetalert2.min.css" rel="stylesheet" type="text/css">

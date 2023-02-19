@@ -18,7 +18,7 @@
                 </div>
                 <div class="">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="kw" name="kw" style="height: 38px;background-color: rgba(255, 255, 255, 0.1);border-radius: 30px; color: white; border: none">
+                        <input type="text" class="form-control" placeholder="Search customer..." id="kw" name="kw" style="height: 38px;background-color: rgba(255, 255, 255, 0.1);border-radius: 30px; color: white; border: none">
                         <span style="position: absolute;left:150px"><button class="btn" type="submit"><i class="fe-search"></i></button></span>
 <%--                        <div class="input-group-append">--%>
 <%--                            <button class="btn" type="submit">--%>

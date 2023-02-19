@@ -163,4 +163,9 @@ public class MSProductService extends DBContext implements IProductService {
         }
         return products;
     }
+
+    @Override
+    public void updateProductQuantity() {
+
+    }
 }

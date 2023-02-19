@@ -16,14 +16,18 @@ public class MSCustomerService extends DBContext implements ICustomerService {
 
     private static final String UPDATE_CUSTOMER_BY_ID = "UPDATE `customer` SET `name` = ?, `birthday` = ?,`address` = ?, `img` = ?, `idType` = ? WHERE `id` = ?";
     private static final String CHECK_IMAGE_EXIST = "SELECT * FROM customer where `img` = ?";
-    private static final String SEARCH_PAGGING_ALL_CUSTOMERS_ASC = "select sql_calc_found_rows * from (SELECT * FROM customer where name like ? limit ?, ?) result  order by name asc";
+    private static final String SEARCH_PAGGING_ALL_CUSTOMERS_ASC = "select sql_calc_found_rows * FROM customer where name like ? order by ? asc limit ?,?";
     private static final String SEARCH_PAGGING_ALL_CUSTOMERS_DESC = "select sql_calc_found_rows * from (SELECT * FROM customer where name like ? limit ?, ?) result  order by name desc";
 
     private static final String SEARCH_PAGGING_CUSTOMERS_ASC = "select sql_calc_found_rows * from (SELECT * FROM customer where name like ? and idType = ? limit ?, ?) result  order by name asc";
     private static final String SEARCH_PAGGING_CUSTOMERS_DESC = "select sql_calc_found_rows * from (SELECT * FROM customer where name like ? and idType = ? limit ?, ?) result  order by name desc";
+    private static final String SEARCH_PAGGING_ALL_CUSTOMERS = "select sql_calc_found_rows * FROM customer where name like ? order by ? asc limit ?,?";
+    private static final String SEARCH_PAGGING_CUSTOMERS = "SELECT sql_calc_found_rows * FROM customer where name like ? and idType = ?  limit ?, ?";
 
     private static final String SELECT_FOUND_ROWS = "SELECT FOUND_ROWS()";
     private static final String SORT_BY_NAME_ASC_ALL = "SELECT * FROM customer order by name asc";
+    private static final String SEARCH_PAGGING_SORTTING_ALL_CUSTOMERS_FORMAT = "select sql_calc_found_rows * FROM customer where name like ? order by %s %s limit ?,?";
+    private static final String SEARCH_PAGGING_SORTTING_CUSTOMERS_FORMAT = "select sql_calc_found_rows * FROM customer where ? like ? and idType = ? order by %s %s limit ?,?";
 
     private int noOfRecords;
 
@@ -181,39 +185,63 @@ public class MSCustomerService extends DBContext implements ICustomerService {
     }
 
     @Override
-    public List<Customer> searchCustomerAndPagging(int sort, String keyword, long idCustomerType, int offset, int limit) {
+    public List<Customer> searchCustomerAndPaggingNoSort(String keyword, long idCustomerType, int offset, int limit) {
         Connection connection = getConnection();
 
         List<Customer> customers = new ArrayList<>();
         try {
             PreparedStatement ps = null;
             if (idCustomerType == -1) {
-                if(sort == 1){
-                    ps = connection.prepareStatement(SEARCH_PAGGING_ALL_CUSTOMERS_ASC);
-                    ps.setString(1, "%" + keyword + "%");
-                    ps.setInt(2, offset);
-                    ps.setInt(3, limit);
-                } else{
-                    ps = connection.prepareStatement(SEARCH_PAGGING_ALL_CUSTOMERS_DESC);
-                    ps.setString(1, "%" + keyword + "%");
-                    ps.setInt(2, offset);
-                    ps.setInt(3, limit);
-                }
+                ps = connection.prepareStatement(SEARCH_PAGGING_ALL_CUSTOMERS);
+                ps.setString(1, "%" + keyword + "%");
+                ps.setInt(2, offset);
+                ps.setInt(3, limit);
             }else {
-                if(sort == 1){
-                    ps = connection.prepareStatement(SEARCH_PAGGING_CUSTOMERS_ASC);
-                    ps.setString(1, "%" + keyword + "%");
-                    ps.setLong(2, idCustomerType);
-                    ps.setInt(3, offset);
-                    ps.setInt(4, limit);
-                } else {
-                    ps = connection.prepareStatement(SEARCH_PAGGING_CUSTOMERS_DESC);
-                    ps.setString(1, "%" + keyword + "%");
-                    ps.setLong(2, idCustomerType);
-                    ps.setInt(3, offset);
-                    ps.setInt(4, limit);
-                }
+                ps = connection.prepareStatement(SEARCH_PAGGING_CUSTOMERS);
+                ps.setString(1, "%" + keyword + "%");
+                ps.setLong(2, idCustomerType);
+                ps.setInt(3, offset);
+                ps.setInt(4, limit);
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Customer customer = getCustomerFromRs(rs);
+                customers.add(customer);
+            }
+            rs = ps.executeQuery(SELECT_FOUND_ROWS);
+            while (rs.next()){
+                noOfRecords = rs.getInt(1);
+            }
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customers;
+    }
 
+    @Override
+    public List<Customer> searchCustomerAndPagging(String sortName, String sortOption, String keyword, long idCustomerType, int offset, int limit) {
+        Connection connection = getConnection();
+
+        List<Customer> customers = new ArrayList<>();
+        try {
+            PreparedStatement ps = null;
+            if (idCustomerType == -1) {
+                //select sql_calc_found_rows * FROM customer where name like ? order by %s %s limit ?,?
+                String querySPS_AllCustomers = String.format(SEARCH_PAGGING_SORTTING_ALL_CUSTOMERS_FORMAT, sortName, sortOption);
+                ps = connection.prepareStatement(querySPS_AllCustomers);
+                ps.setString(1, "%" + keyword + "%");
+                ps.setInt(2, offset);
+                ps.setInt(3, limit);
+            }else {
+                //select sql_calc_found_rows * from (SELECT * FROM customer where name like ? and idType = ? limit ?, ?) result  order by %s %s
+                //select sql_calc_found_rows * FROM customer where name like ? and idType = ? order by %s %s limit ?,?
+                String querySPS_Customer = String.format(SEARCH_PAGGING_SORTTING_CUSTOMERS_FORMAT, sortName, sortOption);
+                ps = connection.prepareStatement(querySPS_Customer);
+                ps.setString(1, "%" + keyword + "%");
+                ps.setLong(2, idCustomerType);
+                ps.setInt(3, offset);
+                ps.setInt(4, limit);
             }
             ResultSet rs = ps.executeQuery();
             while (rs.next()){

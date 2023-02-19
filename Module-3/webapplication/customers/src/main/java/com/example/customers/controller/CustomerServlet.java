@@ -62,7 +62,6 @@ public class CustomerServlet extends HttpServlet {
         }
 
     }
-
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
         List<CustomerType> customerTypes = iCustomerTypeService.getAllCustomerType();
         request.setAttribute("customerTypes", customerTypes);
@@ -95,7 +94,8 @@ public class CustomerServlet extends HttpServlet {
         int limit = 5;
         int page = 1;
         int idCustomerType = -1;
-        int sort = 1;
+        String sortName = "name";
+        String sortOption = "asc";
 
         if (request.getParameter("kw") != null) {
             kw = request.getParameter("kw");
@@ -109,28 +109,27 @@ public class CustomerServlet extends HttpServlet {
         if (request.getParameter("limit") != null && !request.getParameter("limit").equals("")) {
             limit = Integer.parseInt(request.getParameter("limit"));
         }
-        if (request.getParameter("sort") != null && !request.getParameter("sort").equals("")) {
-            sort = Integer.parseInt(request.getParameter("sort"));
+        if (request.getParameter("sort.name") != null && !request.getParameter("sort.name").equals("")) {
+            sortName = request.getParameter("sort.name");
         }
-        List<Customer> customers = iCustomerService.searchCustomerAndPagging(sort, kw, idCustomerType, (page - 1) * limit, limit);
+        if (request.getParameter("sort.option") != null && !request.getParameter("sort.option").equals("")) {
+            sortOption = request.getParameter("sort.option");
+        }
+        List<Customer> customers = iCustomerService.searchCustomerAndPagging(sortName, sortOption, kw, idCustomerType, (page - 1) * limit, limit);
+
+//        List<Customer> customers = iCustomerService.searchCustomerAndPaggingNoSort(kw, idCustomerType, (page - 1) * limit, limit);
         List<CustomerType> customerTypes = iCustomerTypeService.getAllCustomerType();
 
         int noOfRecords = iCustomerService.getNoOfRecords(); // so luong ket qua search
-        int noOfPage = (int) Math.ceil(noOfRecords * 1.0 / limit); // so luong page
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / limit);
 
-//        request.setAttribute("currentPage", page); // page hien tai
-//        request.setAttribute("pages", noOfPage); // tong page
-//        request.setAttribute("kw", kw);
-//        request.setAttribute("ct", idCustomerType);
-//        request.setAttribute("customers", customers);
-//        request.setAttribute("customerTypes", customerTypes);
 
         request.setAttribute("customers", customers);
         request.setAttribute("customerTypes", customerTypes);
         request.setAttribute("kw", kw);
         request.setAttribute("ct", idCustomerType);
-        request.setAttribute("sort", sort);
+        request.setAttribute("sortName", sortName);
+        request.setAttribute("sortOption", sortOption);
 
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPages", noOfPages);
@@ -170,12 +169,14 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
+
+
     private void sortByNameASC(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Customer> customers = iCustomerService.sortByNameASC();
         request.setAttribute("customers", customers);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderDashboard + "customers.jsp");
-        requestDispatcher.forward(request,response);
+        requestDispatcher.forward(request, response);
     }
 
     private void editCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -185,33 +186,33 @@ public class CustomerServlet extends HttpServlet {
         Customer customer = new Customer();
 
 //        try {
-            isValidateName(request, customer, errors);
-            isValidateAddress(request, customer, errors);
-            isValidateType(request, customer, errors);
+        isValidateName(request, customer, errors);
+        isValidateAddress(request, customer, errors);
+        isValidateType(request, customer, errors);
 
-            Part part = isValidImage(request, customer, errors);
+        Part part = isValidImage(request, customer, errors);
 
-            String sBirthday = request.getParameter("birthday");
-            Date birthday = DateUtils.formatDate(sBirthday);
-            customer.setBirthday(birthday);
+        String sBirthday = request.getParameter("birthday");
+        Date birthday = DateUtils.formatDate(sBirthday);
+        customer.setBirthday(birthday);
 
-            if (errors.isEmpty()) {
-                long id = Long.parseLong(request.getParameter("id"));
-                customer.setId(id);
-                Customer customerDB = iCustomerService.findCustomerById(customer.getId());
-                if (customer.getImg() != null) {
-                    if (customerDB.getImg() != null && !customerDB.getImg().equals(customer.getImg()) && part != null) {
-                        handleEditImageUploadAdvanced(part);
-                    }
+        if (errors.isEmpty()) {
+            long id = Long.parseLong(request.getParameter("id"));
+            customer.setId(id);
+            Customer customerDB = iCustomerService.findCustomerById(customer.getId());
+            if (customer.getImg() != null) {
+                if (customerDB.getImg() != null && !customerDB.getImg().equals(customer.getImg()) && part != null) {
+                    handleEditImageUploadAdvanced(part);
                 }
-                iCustomerService.editCustomer(customer);
-                response.sendRedirect("/customer");
-            } else {
-                request.setAttribute("errors", errors);
-                request.setAttribute("customer", customer);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderDashboard + "customer/edit.jsp");
-                requestDispatcher.forward(request, response);
             }
+            iCustomerService.editCustomer(customer);
+            response.sendRedirect("/customer");
+        } else {
+            request.setAttribute("errors", errors);
+            request.setAttribute("customer", customer);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Resource.folderDashboard + "customer/edit.jsp");
+            requestDispatcher.forward(request, response);
+        }
 //        } catch (Exception e) {
 //            errors.add("Định dạng các trường dữ liệu không hợp lệ");
 //        }
@@ -332,8 +333,8 @@ public class CustomerServlet extends HttpServlet {
 
     private void isValidateTime(HttpServletRequest request, Customer customer, List<String> errors) {
         String sBirthday = request.getParameter("birthday");
-        if(sBirthday == null){
-                errors.add("Định dạng ngày tháng không hợp lệ");
+        if (sBirthday == null) {
+            errors.add("Định dạng ngày tháng không hợp lệ");
         }
         Date birthday = DateUtils.formatDate(sBirthday);
 

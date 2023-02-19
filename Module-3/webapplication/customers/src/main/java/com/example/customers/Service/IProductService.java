@@ -13,4 +13,5 @@ public interface IProductService {
     boolean checkImageExists(String fileName);
 
     List<Product> getAllProductsByCategoryId(int categoryId);
+    void updateProductQuantity();
 }

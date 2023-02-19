@@ -34,3 +34,5 @@
 <script src="/frontend/js\easing.js"></script>
 <!-- Active JS -->
 <script src="/frontend/js\active.js"></script>
+
+<script src="/frontend/js/sweetalert2.min.js"></script>

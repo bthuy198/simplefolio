@@ -12,7 +12,8 @@ public interface ICustomerService {
     void deleteCustomerById(Long id);
     void createCustomer(Customer customer);
     boolean checkImageExists(String fileName);
-    List<Customer> searchCustomerAndPagging(int sort, String keyword, long idCustomerType, int offset, int limit);
+    List<Customer> searchCustomerAndPaggingNoSort(String keyword, long idCustomerType, int offset, int limit);
+    List<Customer> searchCustomerAndPagging(String sortName,String sortOption, String keyword, long idCustomerType, int offset, int limit);
     int getNoOfRecords();
     void setNoOfRecords(int noOfRecords);
     List<Customer> sortByNameASC();
