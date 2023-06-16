@@ -31,6 +31,19 @@
 
   <!-- Todo: remove the below script once you finish your portfolio -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <style>
+    .img-develop-icon {
+      width: calc(100% / 7);
+      height: auto;
+      padding: 5px;
+    }
+
+    /* #knowledge:nth-last-child()>div>.img-develop-icon {
+      width: calc(100% / 8);
+      height: auto;
+      padding: 5px;
+    } */
+  </style>
 </head>
 
 <!-- Todo: read the following HTML Todos to create your stunning portfolio website -->
@@ -56,7 +69,7 @@
   <!-- **** About Section **** -->
   <section id="about">
     <div class="container">
-      <h2 class="section-title load-hidden">về tôi</h2>
+      <h2 class="section-title load-hidden">Giới thiệu bản thân </h2>
       <div class="row about-wrapper">
         <div class="col-md-6 col-sm-12">
           <div class="about-wrapper__image load-hidden">
@@ -67,15 +80,18 @@
         <div class="col-md-6 col-sm-12">
           <div class="about-wrapper__info load-hidden">
             <p class="about-wrapper__info-text">
-              This is where you can describe about yourself. The more you
-              describe about yourself, the more chances you have!
+              Tôi mong muốn được thử thách bản thân để phát triển và nâng cao hơn về kiến thức và kỹ năng. Mục tiêu lớn
+              nhất tôi hướng đến là vận dụng năng lực của mình để mang lại nhiều lợi ích chung cho cá nhân và tổ chức.
             </p>
             <p class="about-wrapper__info-text">
-              Extra Information about you! like hobbies and your goals.
+              Mục tiêu ngắn hạn: nâng cao trình độ tiếng Anh và trở thành một lập trình viên chuyên nghiệp.
+            </p>
+            <p class="about-wrapper__info-text">
+              Mục tiêu dài hạn: nâng cao trình độ tiếng Anh và tiếng Nhật, nâng cao kỹ năng giao tiếp và định hướng trở
+              thành kỹ sư cầu nối.
             </p>
             <span class="d-flex mt-3">
-              <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--resume"
-                href="assets/Đặng Thị Bích Thủy_CV-VI.pdf">
+              <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--resume" href="assets/DangThiBichThuy.pdf">
                 Xem CV
               </a>
             </span>
@@ -85,6 +101,79 @@
     </div>
   </section>
   <!-- /END About Section -->
+
+
+  <!-- **** certificate Section **** -->
+  <section id="certificate">
+    <div class="container">
+      <div class="project-wrapper">
+        <h2 class="section-title dark-blue-text">Chứng chỉ</h2>
+
+        <!-- Notice: each .row is a project -->
+        <div class="row about-wrapper">
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__image load-hidden">
+              <img alt="Profile Image" height="auto" width="300px" src="assets/toeic.png" alt="Profile Image" />
+            </div>
+            <div style="padding: 20px;">
+              <h3 style="font-size: 35px;">TOEIC 560</h3>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__image load-hidden">
+              <img alt="Profile Image" height="200px" width="500px" src="assets/jlpt.png" alt="Profile Image" />
+            </div>
+            <div style="padding: 20px;">
+              <h3 style="font-size: 35px;">JLPT N2</h3>
+            </div>
+          </div>
+        </div>
+        <!-- /END Project -->
+
+      </div>
+    </div>
+  </section>
+  <!-- /END certificate Section -->
+
+  <!-- **** knowledge Section **** -->
+  <section id="knowledge" style="padding-bottom: 13%;">
+    <div class="container">
+      <h2 class="section-title load-hidden">Kiến thức </h2>
+      <div class="row about-wrapper" style="display: flex; justify-content: center;">
+        <div class=" d-flex" style="flex-wrap: wrap;" data-aos="fade-up" data-aos-delay="100">
+          <img src="assets/img/develop-icons/oop.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/mysql.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/html.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/css.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/js.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/bootstrap.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/java.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/jquery.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/jsp.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/api.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/scrum.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/spring.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/react.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/redux.png" class="img-fluid img-develop-icon">
+        </div>
+      </div>
+    </div>
+    <div class="container" style="margin-top: 50px;">
+      <h2 class="section-title load-hidden">Công cụ </h2>
+      <div class="row about-wrapper" style="display: flex; justify-content: center;">
+        <div class=" d-flex" style="flex-wrap: wrap;" data-aos="fade-up" data-aos-delay="100">
+          <img src="assets/img/develop-icons/tools/git.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/tools/gitlab.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/tools/intellij-idea.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/tools/jira.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/tools/mysql.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/tools/postman.png" class="img-fluid img-develop-icon">
+          <img src="assets/img/develop-icons/tools/vscode.png" class="img-fluid img-develop-icon">
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /END knowledge Section -->
 
   <!-- **** Projects Section **** -->
   <section id="projects">
@@ -149,7 +238,7 @@
               <!-- <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--hero" href="#!" aria-disabled="true">
                 Demo
               </a> -->
-              <a rel="noreferrer" target="_blank" class="cta-btn text-color-main"
+              <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--hero"
                 href="https://github.com/bthuy198/CinemaBookingSystem">
                 Source Code
               </a>
@@ -186,7 +275,7 @@
                   Áp dụng các kiến thức về Java, Servlet & JSP
                 </p>
               </div>
-              <a rel="noreferrer" target="_blank" class="cta-btn text-color-main"
+              <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--hero"
                 href="https://github.com/bthuy198/EShopManagement">
                 Source Code
               </a>
@@ -209,7 +298,7 @@
         <div class="row">
           <div class="col-lg-4 col-sm-12">
             <div class="project-wrapper__text load-hidden">
-              <h3 class="project-wrapper__text-title">Spb Products Management</h3>
+              <h3 class="project-wrapper__text-title">Products Management - Spring Boot Project</h3>
               <div>
                 <p class="mb-4">
                   Là trang web quản lý sản phẩm được viết bằng framework Spring Boot
@@ -223,7 +312,7 @@
                   jQuery AJAX, RESTful API...
                 </p>
               </div>
-              <a rel="noreferrer" target="_blank" class="cta-btn text-color-main"
+              <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--hero"
                 href="https://github.com/bthuy198/case-md4-spb-product-management">
                 Source Code
               </a>
@@ -246,20 +335,92 @@
         <div class="row">
           <div class="col-lg-4 col-sm-12">
             <div class="project-wrapper__text load-hidden">
-              <h3 class="project-wrapper__text-title">White Lotus Restaurant</h3>
+              <h3 class="project-wrapper__text-title">White Lotus Restaurant - Dashboard</h3>
               <div>
                 <p class="mb-4">
-                  If the project was collaborative, reflect it in this description, that will demonstrate communication
-                  and/or leadership skills.
-                  Additionally, if you made use of the mastery of a second language, it will reflect on you
-                  professionalism.
+                  Là dự án tốt nghiệp của nhóm White Lotus. Nhóm gồm 4 thành viên và hoàn thành sản phẩm trong 5 tuần
+                </p>
+                <p class="mb-4">
+                  + Hiển thị, thêm, sửa, xóa sản phẩm, nhân viên.
+                </p>
+                <p class="mb-4">
+                  + Chức năng phân trang.
+                </p>
+                <p class="mb-4">
+                  + Chức năng phân trang theo kết quả tìm kiếm sản phẩm, nhân viên theo tên.
+                </p>
+                <p class="mb-4">
+                  + Chức năng quản lý bàn.
+                </p>
+                <p class="mb-4">
+                  + Chức năng thống kê doanh thu theo ngày, tháng, năm.
+                </p>
+                <p class="mb-4">
+                  + Chức năng hiển thị sản phẩm bán chạy, bán không chạy.
+                </p>
+                <p class="mb-4">
+                  + Chức năng xem lại hóa đơn và xuất hóa đơn
+                </p>
+                <p class="mb-4">
+                  Tài khoản đăng nhập: thuy@gmail.com / pwd: 123
+                </p>
+              </div>
+              <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--hero"
+                href="https://cp.nhahangsentrang.top/login">
+                Demo
+              </a>
+              <a rel="noreferrer" target="_blank" class="cta-btn text-color-main"
+                href="https://gitlab.com/dev4end/spb-module-white-lotus-restaurant">
+                Source Code
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-8 col-sm-12">
+            <div class="project-wrapper__image load-hidden">
+              <a rel="noreferrer" href="https://nhahangsentrang.top/" target="_blank">
+                <div data-tilt data-tilt-max="4" data-tilt-glare="true" data-tilt-max-glare="0.5"
+                  class="thumbnail rounded js-tilt">
+                  <img alt="Project Image" class="img-fluid" src="assets/project_dashboard.png" />
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- /END Project -->
+
+        <!-- Notice: each .row is a project -->
+        <div class="row">
+          <div class="col-lg-4 col-sm-12">
+            <div class="project-wrapper__text load-hidden">
+              <h3 class="project-wrapper__text-title">White Lotus Restaurant - Cashier Page</h3>
+              <div>
+                <p class="mb-4">
+                  Sử dụng các công nghệ: axios, ReactJS, socket.io, NodeJS,...
+                </p>
+                <p class="mb-4">
+                  Trang web có các chức năng:
+                </p>
+                <p class="mb-4">
+                  + Chức năng đặt món.
+                </p>
+                <p class="mb-4">
+                  + Chức năng nhập bếp, chuyển trạng thái món ăn.
+                </p>
+                <p class="mb-4">
+                  + Chức năng thay đổi số lượng món ăn.
+                </p>
+                <p class="mb-4">
+                  + Chức năng đặt bàn, chuyển bàn, ghép bàn, đóng bàn,...
+                </p>
+                <p class="mb-4">
+                  Tài khoản đăng nhập: thuy@gmail.com / pwd: 123
                 </p>
               </div>
               <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--hero" href="https://nhahangsentrang.top/">
                 Demo
               </a>
               <a rel="noreferrer" target="_blank" class="cta-btn text-color-main"
-                href="https://github.com/bthuy198/case-md4-spb-product-management">
+                href="https://gitlab.com/dev4end/reactjs-white-lotus-restaurant">
                 Source Code
               </a>
             </div>
@@ -293,11 +454,11 @@
     <div class="container">
       <h2 class="section-title">Liên hệ</h2>
       <div class="contact-wrapper load-hidden">
-        <p class="contact-wrapper__text">Đặng Thị Bích Thủy</p>
+        <p class="contact-wrapper__text"> Đặng Thị Bích Thủy</p>
         <p class="contact-wrapper__text">Email: bichthuydangthi198@gmail.com</p>
-        <p class="contact-wrapper__text">Điện thoại liên hệ: 0782098144</p>
-        <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--resume" href="mailto:example@email.com">Call to
-          Action</a>
+        <p class="contact-wrapper__text">Điện thoại: 0782098144</p>
+        <!-- <a rel="noreferrer" target="_blank" class="cta-btn cta-btn--resume" href="mailto:example@email.com">Call to
+          Action</a> -->
       </div>
     </div>
   </section>
@@ -320,24 +481,6 @@
           <i class="fa fa-github fa-inverse"></i>
         </a>
       </div>
-
-      <hr />
-
-      <!-- Notice: if you want to give me some credit, it will be huge for me! if not, put your data on it -->
-      <p class="footer__text">
-        © 2021 - Template developed by
-        <a rel="noreferrer" href="https://github.com/cobiwave" target="_blank">Jacobo Martínez</a>
-      </p>
-
-      <!-- TO DO: remove this entire paragraph once you finish your portfolio -->
-      <p class="mt-3 pt-3">
-        <a rel="noreferrer" class="github-button" href="https://github.com/cobiwave/simplefolio/fork"
-          data-icon="octicon-repo-forked" data-size="large" data-show-count="true"
-          aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
-        <a rel="noreferrer" class="github-button" href="https://github.com/cobiwave/simplefolio"
-          data-icon="octicon-star" data-size="large" data-show-count="true"
-          aria-label="Star cobiwave/simplefolio on GitHub">Star</a>
-      </p>
     </div>
   </footer>
   <!-- /END Footer Section -->
